@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Student Notes App</h3>
+<textarea id="noteInput" placeholder="Write note"></textarea>
+<button onclick="addNote()">Add</button>
+<div id="notesList"></div>
+
+<script>
+function loadNotes() {
+  let notes = JSON.parse(localStorage.getItem("notes")) || [];
+  let out = "";
+  notes.forEach((n,i)=>{
+    out += `<p>${n}
+      <button onclick="editNote(${i})">Edit</button>
+      <button onclick="deleteNote(${i})">Delete</button>
+    </p>`;
+  });
+  document.getElementById("notesList").innerHTML = out;
+}
+
+function addNote() {
+  let note = noteInput.value;
+  if(!note) return alert("Write something!");
+  let notes = JSON.parse(localStorage.getItem("notes")) || [];
+  notes.push(note);
+  localStorage.setItem("notes", JSON.stringify(notes));
+  noteInput.value = ""; loadNotes();
+}
+
+function editNote(i){
+  let notes = JSON.parse(localStorage.getItem("notes"));
+  let updated = prompt("Edit note:", notes[i]);
+  if(updated!==null){ notes[i]=updated; }
+  localStorage.setItem("notes", JSON.stringify(notes));
+  loadNotes();
+}
+
+function deleteNote(i){
+  let notes = JSON.parse(localStorage.getItem("notes"));
+  notes.splice(i,1);
+  localStorage.setItem("notes", JSON.stringify(notes));
+  loadNotes();
+}
+
+loadNotes();
+</script>
+
+</body>
+</html>
